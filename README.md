@@ -1,3 +1,5 @@
+# WIP: Porting from Django Ninja API to Django + HTMX fullstack, assisted by AI and the RealWorld e2e spec suite
+
 # ![RealWorld Example App](logo.png)
 
 > ### Django Ninja + Postgres codebase containing real world examples (CRUD, auth, advanced patterns, etc) that adheres to the [RealWorld](https://github.com/realworld-apps/realworld) spec and API.
