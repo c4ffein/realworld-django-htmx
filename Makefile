@@ -14,6 +14,7 @@ submodule:
 
 help:
 	@echo "Available commands:"
+	@echo "  submodule"
 	@echo "  sync"
 	@echo "  run-debug"
 	@echo "  run"
