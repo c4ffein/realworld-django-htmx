@@ -131,6 +131,8 @@ def article_edit_view(request, slug):
 
 @login_required
 def article_delete_view(request, slug):
+    if request.method != "POST":
+        return redirect("article_detail", slug=slug)
     article = get_object_or_404(Article, slug=slug, author=request.user)
     article.delete()
     return redirect("home")
