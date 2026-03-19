@@ -12,9 +12,9 @@
 </head>
 <body hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'>
   {% include "partials/header.html" %}
-  <main>
+  <app-root>
     {% block content %}{% endblock %}
-  </main>
+  </app-root>
   {% include "partials/footer.html" %}
   <script>
   (function() {
