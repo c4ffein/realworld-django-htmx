@@ -1,0 +1,48 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Conduit</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lora:wght@400;500;600;700&family=Source+Sans+Pro:wght@300;400;500;600;700&display=swap">
+  <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+  <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+  <script src="https://unpkg.com/htmx.org@2.0.4"></script>
+</head>
+<body hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'>
+  {% include "partials/header.html" %}
+  <main>
+    {% block content %}{% endblock %}
+  </main>
+  {% include "partials/footer.html" %}
+  <script>
+  (function() {
+    // Sync JWT token with Django session state
+    {% if conduit_token %}
+    localStorage.setItem('jwtToken', '{{ conduit_token }}');
+    {% else %}
+    localStorage.removeItem('jwtToken');
+    {% endif %}
+
+    var serverUser = {{ conduit_user_json|safe }};
+
+    window.__conduit_debug__ = {
+      getToken: function() {
+        return localStorage.getItem('jwtToken');
+      },
+      getAuthState: function() {
+        {% if conduit_token %}
+        return 'authenticated';
+        {% else %}
+        return 'unauthenticated';
+        {% endif %}
+      },
+      getCurrentUser: function() {
+        return serverUser;
+      }
+    };
+  })();
+  </script>
+</body>
+</html>

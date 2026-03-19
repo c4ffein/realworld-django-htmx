@@ -1,0 +1,110 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="settings-page">
+  <div class="container page">
+    <div class="row">
+      <div class="col-md-6 offset-md-3 col-xs-12">
+        <h1 class="text-xs-center">Your Settings</h1>
+
+        <ul class="error-messages" id="settings-errors" style="display:none"></ul>
+
+        {% if form.non_field_errors %}
+        <ul class="error-messages">
+          {% for error in form.non_field_errors %}
+          <li>{{ error }}</li>
+          {% endfor %}
+        </ul>
+        {% endif %}
+
+        <form method="post" id="settings-form">
+          {% csrf_token %}
+          <fieldset>
+            <fieldset class="form-group">
+              {{ form.image }}
+            </fieldset>
+            <fieldset class="form-group">
+              {{ form.username }}
+            </fieldset>
+            <fieldset class="form-group">
+              {{ form.bio }}
+            </fieldset>
+            <fieldset class="form-group">
+              {{ form.email }}
+            </fieldset>
+            <fieldset class="form-group">
+              {{ form.password }}
+            </fieldset>
+            <button class="btn btn-lg btn-primary pull-xs-right" type="submit">Update Settings</button>
+          </fieldset>
+        </form>
+        <hr>
+        <button type="button" class="btn btn-outline-danger" onclick="window.location.href='{% url 'logout' %}'">Or click here to logout.</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+(function() {
+  var form = document.getElementById('settings-form');
+  var errorsEl = document.getElementById('settings-errors');
+
+  form.addEventListener('submit', function(e) {
+    e.preventDefault();
+    errorsEl.style.display = 'none';
+    errorsEl.innerHTML = '';
+
+    var token = localStorage.getItem('jwtToken');
+    var userData = {};
+    var formData = new FormData(form);
+
+    userData.image = formData.get('image') || '';
+    userData.username = formData.get('username') || '';
+    userData.bio = formData.get('bio') || '';
+    userData.email = formData.get('email') || '';
+    var password = formData.get('password');
+    if (password) userData.password = password;
+
+    fetch('/api/user', {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Token ' + token,
+      },
+      body: JSON.stringify({ user: userData }),
+    })
+    .then(function(response) {
+      return response.json().then(function(data) {
+        return { status: response.status, data: data };
+      });
+    })
+    .then(function(result) {
+      if (result.status === 200 && result.data.user) {
+        localStorage.setItem('jwtToken', result.data.user.token);
+        window.__conduit_debug__.getCurrentUser = function() { return result.data.user; };
+        var username = result.data.user.username;
+        setTimeout(function() { window.location.href = '/profile/' + username; }, 50);
+      } else {
+        var errors = result.data.errors || {};
+        for (var field in errors) {
+          var msgs = errors[field];
+          for (var i = 0; i < msgs.length; i++) {
+            var li = document.createElement('li');
+            li.textContent = field + ' ' + msgs[i];
+            errorsEl.appendChild(li);
+          }
+        }
+        errorsEl.style.display = '';
+      }
+    })
+    .catch(function() {
+      var li = document.createElement('li');
+      li.textContent = 'Unable to connect to server';
+      errorsEl.appendChild(li);
+      errorsEl.style.display = '';
+    });
+  });
+})();
+</script>
+{% endblock %}
