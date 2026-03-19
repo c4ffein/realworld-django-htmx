@@ -4,12 +4,6 @@
 MEMDB := "file:memdb1?mode=memory&cache=shared"
 
 ########################
-# Setup
-
-submodule:
-	git submodule init; git submodule update
-
-########################
 # Django Project
 
 help:
@@ -25,6 +19,12 @@ help:
 	@echo "  lint-check"
 	@echo "  type-check"
 	@echo "  verify"
+	@echo "  e2e             - run e2e tests (auto-starts in-memory SQLite server)"
+	@echo "  e2e-sync"
+	@echo "  e2e-diff"
+
+submodule:
+	git submodule init; git submodule update
 
 sync:
 	uv sync --extra dev
@@ -55,3 +55,12 @@ type-check:
 
 verify:
 	make lint-check && make type-check && make test-django-fast
+
+e2e:
+	API_MODE=false API_BASE=http://localhost:8000/api bun playwright test
+
+e2e-sync:
+	bun e2e/check-sync.mjs
+
+e2e-diff:
+	bun e2e/check-sync.mjs --diff

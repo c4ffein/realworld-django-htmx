@@ -19,7 +19,7 @@ from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib import admin
 from django.http import Http404, HttpRequest, HttpResponse
-from django.urls import path
+from django.urls import include, path
 from ninja import NinjaAPI
 from ninja.errors import AuthorizationError, HttpError, ValidationError
 
@@ -38,8 +38,7 @@ def validation_error_handler(request: HttpRequest, exc: ValidationError) -> Http
         field = str(loc[-1]) if loc else "unknown"
         msg = error.get("msg", "")
         for prefix in ("Value error, ", "Assertion failed, "):
-            if msg.startswith(prefix):
-                msg = msg[len(prefix) :]
+            msg = msg.removeprefix(prefix)
         errors.setdefault(field, []).append(msg)
     return api.create_response(request, {"errors": errors}, status=422)
 
@@ -79,6 +78,9 @@ api.add_router("/auth", "jwt_ninja.api.router")
 
 urlpatterns = [
     path("admin/", admin.site.urls),
+    path("", include("articles.urls")),
+    path("", include("accounts.urls")),
+    path("", include("comments.urls")),
     path("", api.urls),
 ]
 

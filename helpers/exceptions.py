@@ -3,7 +3,11 @@ from sqlite3 import IntegrityError as SQLiteIntegrityError
 from django.db.models import Model, QuerySet
 from django.http import Http404
 from django.shortcuts import get_object_or_404
-from psycopg2.errors import UniqueViolation
+
+try:
+    from psycopg2.errors import UniqueViolation
+except ImportError:
+    UniqueViolation = None  # type: ignore[assignment, misc]
 
 
 class ResourceNotFound(Http404):
