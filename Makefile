@@ -58,7 +58,7 @@ verify:
 	make lint-check && make type-check && make test-django-fast
 
 e2e:
-	API_MODE=false API_BASE=http://localhost:8000/api bun playwright test
+	cd playwright && API_MODE=false API_BASE=http://localhost:8000/api bun playwright test
 
 e2e-sync:
 	bun e2e/check-sync.mjs
