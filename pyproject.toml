@@ -26,6 +26,7 @@ dependencies = [
     "pydantic>=2.9.2",
     "sqlparse==0.4.4",
     "typing-extensions>=4.12.2",
+    "nh3>=0.3.3",
 ]
 
 [project.optional-dependencies]
