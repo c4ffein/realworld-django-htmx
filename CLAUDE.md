@@ -1,5 +1,5 @@
 # realworld-django-htmx
-**WIP: Porting from Django Ninja API to Django + HTMX fullstack, assisted by AI and the RealWorld e2e spec suite**
+**Porting from Django Ninja API to Django + HTMX fullstack, assisted by AI and the RealWorld e2e spec suite**
 
 Django + HTMX implementation of the RealWorld spec.
 
