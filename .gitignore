@@ -4,5 +4,5 @@ __pycache__/
 .env
 db.sqlite3
 node_modules/
-e2e/test-results/
-e2e/playwright-report/
+playwright/test-results/
+playwright/playwright-report/
