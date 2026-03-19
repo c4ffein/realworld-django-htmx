@@ -21,7 +21,7 @@ def comment_create_view(request, slug):
 @login_required
 def comment_delete_view(request, slug, comment_id):
     article = get_object_or_404(Article, slug=slug)
-    comment = get_object_or_404(Comment, id=comment_id)
+    comment = get_object_or_404(Comment, id=comment_id, article=article)
     if comment.author == request.user or article.author == request.user:
         comment.delete()
     if is_htmx(request):
