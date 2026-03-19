@@ -22,6 +22,7 @@ help:
 	@echo "  e2e             - run e2e tests (auto-starts in-memory SQLite server)"
 	@echo "  e2e-sync"
 	@echo "  e2e-diff"
+	@echo "  clean           - remove all __pycache__ directories"
 
 submodule:
 	git submodule init; git submodule update
@@ -64,3 +65,6 @@ e2e-sync:
 
 e2e-diff:
 	bun e2e/check-sync.mjs --diff
+
+clean:
+	find . -type d -name __pycache__ -exec rm -rf {} +
