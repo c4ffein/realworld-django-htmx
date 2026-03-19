@@ -1,11 +1,12 @@
 {% extends "base.html" %}
+{% load static %}
 
 {% block content %}
 <div class="home-page">
   {% if not user.is_authenticated %}
   <div class="banner">
     <div class="container">
-      <h1 class="logo-font">conduit</h1>
+      <h1><img src="{% static 'images/conduit-logo.svg' %}" alt="conduit" style="height:3.5rem"></h1>
       <p>A place to share your knowledge.</p>
     </div>
   </div>
