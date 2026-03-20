@@ -67,7 +67,12 @@ def tag_view(request, tag):
 
 def article_detail_view(request, slug):
     try:
-        article = Article.objects.with_favorites(request.user).select_related("author").get(slug=slug)
+        article = (
+            Article.objects.with_favorites(request.user)
+            .select_related("author")
+            .prefetch_related("tags")
+            .get(slug=slug)
+        )
     except Article.DoesNotExist:
         return render(request, "articles/detail_404.html", {"slug": slug}, status=404)
     comments = article.comment_set.select_related("author").order_by("-created")
