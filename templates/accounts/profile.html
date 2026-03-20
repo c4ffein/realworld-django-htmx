@@ -47,6 +47,22 @@
         </div>
 
         {% include "partials/article_list.html" %}
+
+        {% if pages|length > 1 %}
+        <nav>
+          <ul class="pagination">
+            {% for p in pages %}
+            <li class="page-item{% if p == page %} active{% endif %}">
+              <button class="page-link"
+                 hx-get="{% if tab == 'favorites' %}{% url 'profile_favorites' username=profile_user.username %}{% else %}{% url 'profile' username=profile_user.username %}{% endif %}?page={{ p }}"
+                 hx-target=".profile-page" hx-select=".profile-page" hx-swap="outerHTML" hx-push-url="true">
+                {{ p }}
+              </button>
+            </li>
+            {% endfor %}
+          </ul>
+        </nav>
+        {% endif %}
       </div>
     </div>
   </div>
