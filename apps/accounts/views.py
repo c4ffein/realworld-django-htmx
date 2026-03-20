@@ -95,43 +95,32 @@ def _profile_view(request, username, *, tab):
             "is_self": is_self,
             "is_following": is_following,
             "articles": articles,
-            "tab": "my",
+            "tab": tab,
         },
     )
+
+
+def profile_view(request, username):
+    return _profile_view(request, username, tab="my")
 
 
 def profile_favorites_view(request, username):
-    profile_user = get_object_or_404(User, username=username)
-    is_self = request.user == profile_user
-    is_following = request.user.is_authenticated and request.user.is_following(profile_user)
-    articles = (
-        Article.objects.with_favorites(request.user)
-        .select_related("author")
-        .filter(favorites=profile_user)
-        .order_by("-created")
-    )
-    return render(
-        request,
-        "accounts/profile.html",
-        {
-            "profile_user": profile_user,
-            "is_self": is_self,
-            "is_following": is_following,
-            "articles": articles,
-            "tab": "favorites",
-        },
-    )
+    return _profile_view(request, username, tab="favorites")
 
 
 @login_required
+@require_POST
 def follow_view(request, username):
     profile_user = get_object_or_404(User, username=username)
     if profile_user != request.user:
         if profile_user.followers.filter(pk=request.user.id).exists():
             profile_user.followers.remove(request.user)
+            is_following = False
         else:
             profile_user.followers.add(request.user)
-    is_following = profile_user.followers.filter(pk=request.user.id).exists()
+            is_following = True
+    else:
+        is_following = False
     if is_htmx(request):
         return render(
             request,
