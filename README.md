@@ -4,15 +4,12 @@
 
 ### [RealWorld](https://github.com/realworld-apps/realworld)
 
-A fullstack [RealWorld](https://github.com/realworld-apps/realworld) implementation (Medium clone) using **Django** for server-rendered HTML and **HTMX** for interactive elements, ported from a [Django Ninja](https://django-ninja.dev) API-only codebase.
-
-The original API layer is preserved at `/api/*` for backward compatibility, while the primary interface is now server-rendered with HTMX.
+A fullstack [RealWorld](https://github.com/realworld-apps/realworld) implementation (Medium clone) using **Django** for server-rendered HTML and **HTMX** for interactive elements — no API, no SPA, no JavaScript framework.
 
 #### Architecture
 
 - **Views** use Django session auth, standard forms, and `@login_required`
 - **HTMX** handles interactive elements: favorites, follows, comments, feed pagination/tab switching
-- **API** (`/api/*`) remains available with JWT auth via [Django Ninja](https://django-ninja.dev) for external consumers
 - **E2E tests** validate the fullstack behavior via Playwright
 
 #### Origin
@@ -62,15 +59,12 @@ docker compose up --build  # rebuild and run
 
 | Command | Description |
 |---------|-------------|
-| `make test-django-fast` | Unit tests (in-memory SQLite, fast hasher) |
-| `make test-django` | Unit tests (file-based SQLite) |
-| `make e2e` | Playwright e2e tests (needs running server + bun) |
-| `make verify` | Lint + type-check + fast tests |
+| `make e2e` | Playwright e2e tests (auto-starts server, needs bun) |
+| `make verify` | Lint + type-check |
 
 ### Current test status
 
-- **Unit tests:** 89/89 passing
-- **E2E tests:** 74/139 passing, 65 skipped
+- **E2E tests:** 74/74 passing (65 API-only tests skipped)
 
 ## Development
 
