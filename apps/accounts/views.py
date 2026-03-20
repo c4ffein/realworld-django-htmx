@@ -74,19 +74,19 @@ def logout_view(request):
     return redirect("home")
 
 
-def profile_view(request, username):
+def _profile_view(request, username, *, tab):
     try:
         profile_user = User.objects.get(username=username)
     except User.DoesNotExist:
         return render(request, "accounts/profile_404.html", {"username": username}, status=404)
     is_self = request.user == profile_user
     is_following = request.user.is_authenticated and request.user.is_following(profile_user)
-    articles = (
-        Article.objects.with_favorites(request.user)
-        .select_related("author")
-        .filter(author=profile_user)
-        .order_by("-created")
-    )
+    articles = Article.objects.with_favorites(request.user).select_related("author").prefetch_related("tags")
+    if tab == "favorites":
+        articles = articles.filter(favorites=profile_user)
+    else:
+        articles = articles.filter(author=profile_user)
+    articles = articles.order_by("-created")
     return render(
         request,
         "accounts/profile.html",

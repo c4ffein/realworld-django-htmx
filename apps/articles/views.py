@@ -33,7 +33,7 @@ def _build_feed(request, tag=None):
     else:
         active_tab = "global"
 
-    queryset = queryset.select_related("author").order_by("-created")
+    queryset = queryset.select_related("author").prefetch_related("tags").order_by("-created")
     total = queryset.count()
     articles = list(queryset[offset : offset + ARTICLES_PER_PAGE])
     total_pages = (total + ARTICLES_PER_PAGE - 1) // ARTICLES_PER_PAGE
