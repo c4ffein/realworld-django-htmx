@@ -14,7 +14,7 @@
     {% if user == comment.author or user == article.author %}
     <span class="mod-options">
       <i class="ion-trash-a"
-         hx-delete="{% url 'comment_delete' slug=article.slug comment_id=comment.id %}"
+         hx-post="{% url 'comment_delete' slug=article.slug comment_id=comment.id %}"
          hx-target="#comment-list" hx-swap="innerHTML"></i>
     </span>
     {% endif %}

@@ -2,6 +2,7 @@ from django.contrib.auth import get_user_model
 from django.contrib.auth.decorators import login_required
 from django.core.cache import cache
 from django.shortcuts import get_object_or_404, redirect, render
+from django.views.decorators.http import require_POST
 from taggit.models import Tag
 
 from articles.forms import ArticleForm
@@ -131,15 +132,15 @@ def article_edit_view(request, slug):
 
 
 @login_required
+@require_POST
 def article_delete_view(request, slug):
-    if request.method != "POST":
-        return redirect("article_detail", slug=slug)
     article = get_object_or_404(Article, slug=slug, author=request.user)
     article.delete()
     return redirect("home")
 
 
 @login_required
+@require_POST
 def article_favorite_view(request, slug):
     article = get_object_or_404(Article, slug=slug)
     if article.favorites.filter(id=request.user.id).exists():
