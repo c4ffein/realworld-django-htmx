@@ -1,5 +1,6 @@
 from django.contrib.auth import get_user_model
 from django.contrib.auth.decorators import login_required
+from django.core.cache import cache
 from django.shortcuts import get_object_or_404, redirect, render
 from taggit.models import Tag
 
@@ -38,7 +39,7 @@ def _build_feed(request, tag=None):
     total_pages = (total + ARTICLES_PER_PAGE - 1) // ARTICLES_PER_PAGE
     pages = range(1, total_pages + 1)
 
-    tags = Tag.objects.all()
+    tags = cache.get_or_set("all_tags", Tag.objects.all, timeout=300)
 
     context = {
         "articles": articles,
