@@ -9,6 +9,8 @@ from accounts.forms import LoginForm, RegisterForm, SettingsForm
 from helpers.exceptions import clean_integrity_error
 from helpers.htmx import is_htmx
 
+ARTICLES_PER_PAGE = 10
+
 User = get_user_model()
 
 
@@ -88,7 +90,7 @@ def _profile_view(request, username, *, tab):
         articles = articles.filter(favorites=profile_user)
     else:
         articles = articles.filter(author=profile_user)
-    articles = articles.order_by("-created")
+    articles = list(articles.order_by("-created")[:ARTICLES_PER_PAGE])
     return render(
         request,
         "accounts/profile.html",
