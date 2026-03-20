@@ -37,7 +37,10 @@
           </fieldset>
         </form>
         <hr>
-        <button type="button" class="btn btn-outline-danger" onclick="window.location.href='{% url 'logout' %}'">Or click here to logout.</button>
+        <form method="post" action="{% url 'logout' %}">
+          {% csrf_token %}
+          <button type="submit" class="btn btn-outline-danger">Or click here to logout.</button>
+        </form>
       </div>
     </div>
   </div>

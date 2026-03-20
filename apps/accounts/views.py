@@ -64,13 +64,13 @@ def settings_view(request):
             user.save()
             if password:
                 login(request, user)
-            request.session.pop("jwt_token", None)  # clear stale JWT so context processor regenerates
             return redirect("profile", username=user.username)
     else:
         form = SettingsForm(instance=request.user)
     return render(request, "accounts/settings.html", {"form": form})
 
 
+@require_POST
 def logout_view(request):
     logout(request)
     return redirect("home")
