@@ -5,6 +5,7 @@ class ArticleForm(forms.Form):
     """Article editor form with field names matching the RealWorld SELECTORS.md spec."""
 
     title = forms.CharField(
+        max_length=150,
         widget=forms.TextInput(attrs={"class": "form-control form-control-lg", "placeholder": "Article Title"}),
     )
     description = forms.CharField(
