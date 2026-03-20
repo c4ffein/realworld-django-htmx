@@ -1,6 +1,7 @@
 from typing import Self
 
 import markdown
+import nh3
 from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import AnonymousUser
@@ -46,5 +47,4 @@ class Article(models.Model):
         super().save(*args, **kwargs)
 
     def as_markdown(self) -> str:
-        """Unused here as we are consumed by a SPA"""
-        return markdown.markdown(self.content, safe_mode="escape", extensions=["extra"])
+        return nh3.clean(markdown.markdown(self.content, extensions=["extra"]))
