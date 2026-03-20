@@ -4,7 +4,11 @@ from helpers.jwt_utils import create_jwt_token
 
 
 def conduit_debug(request):
-    """Context processor that provides data for window.__conduit_debug__ interface."""
+    """Context processor that provides data for window.__conduit_debug__ interface.
+
+    The HTMX views use Django session auth, but the e2e test suite
+    expects window.__conduit_debug__ with a JWT token for API calls.
+    """
     if request.user.is_authenticated:
         token = request.session.get("jwt_token")
         if not token:

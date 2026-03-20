@@ -6,15 +6,8 @@ from django.shortcuts import get_object_or_404, redirect, render
 
 from accounts.forms import LoginForm, RegisterForm, SettingsForm
 from helpers.htmx import is_htmx
-from helpers.jwt_utils import create_jwt_token
 
 User = get_user_model()
-
-
-def _store_jwt(request, user):
-    """Generate a JWT token and store it in the Django session."""
-    token = str(create_jwt_token(user, request))
-    request.session["jwt_token"] = token
 
 
 def login_view(request):
@@ -24,7 +17,6 @@ def login_view(request):
             user = authenticate(email=form.cleaned_data["email"], password=form.cleaned_data["password"])
             if user is not None:
                 login(request, user)
-                _store_jwt(request, user)
                 return redirect("home")
             form.add_error(None, "Invalid email or password.")
     else:
@@ -44,7 +36,6 @@ def register_view(request):
                         password=form.cleaned_data["password"],
                     )
                 login(request, user)
-                _store_jwt(request, user)
                 return redirect("home")
             except IntegrityError as err:
                 err_str = str(err).lower()
@@ -71,7 +62,7 @@ def settings_view(request):
             user.save()
             if password:
                 login(request, user)
-            _store_jwt(request, user)
+            request.session.pop("jwt_token", None)  # clear stale JWT so context processor regenerates
             return redirect("profile", username=user.username)
     else:
         form = SettingsForm(instance=request.user)
