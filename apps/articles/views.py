@@ -17,7 +17,10 @@ ARTICLES_PER_PAGE = 10
 def _build_feed(request, tag=None):
     """Shared logic for home and tag views."""
     feed = request.GET.get("feed")
-    page = int(request.GET.get("page", 1))
+    try:
+        page = int(request.GET.get("page", 1))
+    except (ValueError, TypeError):
+        page = 1
     offset = (page - 1) * ARTICLES_PER_PAGE
 
     queryset = Article.objects.with_favorites(request.user)
