@@ -1,7 +1,5 @@
 from typing import Self
 
-import markdown
-import nh3
 from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import AnonymousUser
@@ -33,7 +31,7 @@ class Article(models.Model):
     summary = models.TextField(blank=True)
     content = models.TextField(blank=True)
 
-    created = models.DateTimeField(auto_now_add=True)
+    created = models.DateTimeField(auto_now_add=True, db_index=True)
     updated = models.DateTimeField(auto_now=True)
 
     tags = TaggableManager(blank=True)
@@ -43,8 +41,6 @@ class Article(models.Model):
     objects = ArticleManager()
 
     def save(self, *args, **kwargs) -> None:
-        self.slug = slugify(self.title)
+        if not self.pk:
+            self.slug = slugify(self.title)
         super().save(*args, **kwargs)
-
-    def as_markdown(self) -> str:
-        return nh3.clean(markdown.markdown(self.content, extensions=["extra"]))
