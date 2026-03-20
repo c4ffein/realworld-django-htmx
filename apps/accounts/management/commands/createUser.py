@@ -7,20 +7,20 @@ class Command(BaseCommand):
 
     def add_arguments(self, parser: CommandParser) -> None:
         parser.add_argument("--email", type=str, help="User's email")
-        parser.add_argument("--name", type=str, help="User's name")
+        parser.add_argument("--username", type=str, help="User's username")
         parser.add_argument("--password", type=str, help="User's password")
 
     def handle(self, *args, **options) -> None:
         email: str = options["email"]
-        name: str = options["name"]
+        username: str = options["username"]
         password: str = options["password"]
 
         User = get_user_model()
-        if email and name and password:
-            if not User.objects.filter(email=email).exists() and not User.objects.filter(name=name).exists():
-                User.objects.create_user(email=email, password=password, name=name)
-                self.stdout.write(self.style.SUCCESS("Admin user created successfully."))
+        if email and username and password:
+            if not User.objects.filter(email=email).exists() and not User.objects.filter(username=username).exists():
+                User.objects.create_user(email=email, password=password, username=username)
+                self.stdout.write(self.style.SUCCESS("User created successfully."))
             else:
-                self.stdout.write(self.style.WARNING("Admin user already exists."))
+                self.stdout.write(self.style.WARNING("User already exists."))
         else:
-            self.stdout.write(self.style.ERROR("Please provide --email, --name, and --password arguments."))
+            self.stdout.write(self.style.ERROR("Please provide --email, --username, and --password arguments."))
