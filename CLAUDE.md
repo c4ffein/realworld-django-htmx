@@ -7,10 +7,10 @@
 
 ## Before finishing
 
-Run `make verify` (lint + type-check) and fix any issues.
+Run `make verify` (lint + type-check + unit tests) and fix any issues.
 
 ## Commands
 
 - `make sync` - install dependencies
-- `make verify` - lint, type-check
+- `make verify` - lint, type-check, unit tests
 - `make e2e` - run Playwright e2e tests

@@ -38,10 +38,10 @@ run:
 	uv run python manage.py runserver 0.0.0.0:8000
 
 test-django:
-	DEBUG=True uv run python manage.py test apps
+	DEBUG=True uv run python manage.py test apps helpers
 
 test-django-fast:
-	DEBUG=True DATABASE_URL=$(MEMDB) USE_FAST_HASHER=True uv run python manage.py test apps
+	DEBUG=True DATABASE_URL=$(MEMDB) USE_FAST_HASHER=True uv run python manage.py test apps helpers
 
 lint:
 	uv run ruff check --fix; uv run ruff format

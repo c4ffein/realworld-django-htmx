@@ -4,7 +4,7 @@
 
 ### [RealWorld](https://github.com/realworld-apps/realworld)
 
-A fullstack [RealWorld](https://github.com/realworld-apps/realworld) implementation (Medium clone) using **Django** for server-rendered HTML and **HTMX** for interactive elements — no API, no SPA, no JavaScript framework.
+A fullstack [RealWorld](https://github.com/realworld-apps/realworld) implementation (Medium clone) using **Django** for server-rendered HTML and **HTMX** for interactive elements — no API, no SPA.
 
 #### Architecture
 
@@ -59,12 +59,15 @@ docker compose up --build  # rebuild and run
 
 | Command | Description |
 |---------|-------------|
+| `make test-django-fast` | Unit tests (in-memory SQLite, fast hasher) |
+| `make test-django` | Unit tests (file-based SQLite) |
 | `make e2e` | Playwright e2e tests (auto-starts server, needs bun) |
-| `make verify` | Lint + type-check |
+| `make verify` | Lint + type-check + unit tests |
 
 ### Current test status
 
-- **E2E tests:** 74/74 passing (65 API-only tests skipped)
+- **Unit tests:** 4/4 passing — minimal, only covering internals hard to reach via browser (DB error parsing)
+- **E2E tests:** 74/74 passing (65 API-only tests skipped) — the [RealWorld e2e suite](https://github.com/realworld-apps/realworld) is the primary test coverage for this project, validating views, forms, and models through real browser interactions
 
 ## Development
 
