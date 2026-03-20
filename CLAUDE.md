@@ -7,7 +7,11 @@
 
 ## Before finishing
 
-Run `make verify` (lint + type-check + unit tests) and fix any issues.
+Run `make verify` (lint + type-check + unit tests) and `make e2e` (Playwright e2e tests), and fix any issues.
+
+## Testing
+
+When asked to "run the tests", run both `make verify` and `make e2e`. The unit test suite has minimal coverage — e2e is the real test suite.
 
 ## Commands
 
