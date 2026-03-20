@@ -81,7 +81,12 @@ def profile_view(request, username):
         return render(request, "accounts/profile_404.html", {"username": username}, status=404)
     is_self = request.user == profile_user
     is_following = request.user.is_authenticated and request.user.is_following(profile_user)
-    articles = Article.objects.with_favorites(request.user).filter(author=profile_user).order_by("-created")
+    articles = (
+        Article.objects.with_favorites(request.user)
+        .select_related("author")
+        .filter(author=profile_user)
+        .order_by("-created")
+    )
     return render(
         request,
         "accounts/profile.html",
@@ -99,7 +104,12 @@ def profile_favorites_view(request, username):
     profile_user = get_object_or_404(User, username=username)
     is_self = request.user == profile_user
     is_following = request.user.is_authenticated and request.user.is_following(profile_user)
-    articles = Article.objects.with_favorites(request.user).filter(favorites=profile_user).order_by("-created")
+    articles = (
+        Article.objects.with_favorites(request.user)
+        .select_related("author")
+        .filter(favorites=profile_user)
+        .order_by("-created")
+    )
     return render(
         request,
         "accounts/profile.html",
