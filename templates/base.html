@@ -18,25 +18,11 @@
   {% include "partials/footer.html" %}
   <script>
   (function() {
-    // Sync JWT token with Django session state
-    {% if conduit_token %}
-    localStorage.setItem('jwtToken', '{{ conduit_token }}');
-    {% else %}
-    localStorage.removeItem('jwtToken');
-    {% endif %}
-
     var serverUser = {{ conduit_user_json|safe }};
 
     window.__conduit_debug__ = {
-      getToken: function() {
-        return localStorage.getItem('jwtToken');
-      },
       getAuthState: function() {
-        {% if conduit_token %}
-        return 'authenticated';
-        {% else %}
-        return 'unauthenticated';
-        {% endif %}
+        return {% if conduit_authenticated %}'authenticated'{% else %}'unauthenticated'{% endif %};
       },
       getCurrentUser: function() {
         return serverUser;

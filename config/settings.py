@@ -7,7 +7,6 @@ Django settings for config project.
 """
 
 import sys
-from datetime import timedelta
 from os import getenv
 from pathlib import Path
 from urllib.parse import urlparse
@@ -36,13 +35,10 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
-    # Needed for auto-host of Swagger files
-    "ninja",
     # 3rd Party Packages
     "taggit",
     "corsheaders",
     "django_extensions",
-    "jwt_ninja",
     # Local Apps
     "apps.accounts",
     "apps.articles",
@@ -73,7 +69,7 @@ TEMPLATES = [
                 "django.template.context_processors.request",
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
-                "helpers.context_processors.conduit_debug",
+                "helpers.context_processors.conduit_context",
             ],
         },
     },
@@ -149,10 +145,3 @@ STATICFILES_DIRS = [BASE_DIR / "static"]
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 AUTH_USER_MODEL = "accounts.User"
 LOGIN_URL = "/login"
-
-
-# JWT token settings using jwt-ninja
-JWT_NINJA = {
-    "ACCESS_TOKEN_LIFETIME": timedelta(days=7),
-    "REFRESH_TOKEN_LIFETIME": timedelta(days=7),
-}
