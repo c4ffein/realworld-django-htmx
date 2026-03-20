@@ -83,14 +83,26 @@ def _profile_view(request, username, *, tab):
         profile_user = User.objects.get(username=username)
     except User.DoesNotExist:
         return render(request, "accounts/profile_404.html", {"username": username}, status=404)
+
+    try:
+        page = int(request.GET.get("page", 1))
+    except (ValueError, TypeError):
+        page = 1
+    offset = (page - 1) * ARTICLES_PER_PAGE
+
     is_self = request.user == profile_user
     is_following = request.user.is_authenticated and request.user.is_following(profile_user)
-    articles = Article.objects.with_favorites(request.user).select_related("author").prefetch_related("tags")
+    queryset = Article.objects.with_favorites(request.user).select_related("author").prefetch_related("tags")
     if tab == "favorites":
-        articles = articles.filter(favorites=profile_user)
+        queryset = queryset.filter(favorites=profile_user)
     else:
-        articles = articles.filter(author=profile_user)
-    articles = list(articles.order_by("-created")[:ARTICLES_PER_PAGE])
+        queryset = queryset.filter(author=profile_user)
+    queryset = queryset.order_by("-created")
+    total = queryset.count()
+    articles = list(queryset[offset : offset + ARTICLES_PER_PAGE])
+    total_pages = (total + ARTICLES_PER_PAGE - 1) // ARTICLES_PER_PAGE
+    pages = range(1, total_pages + 1)
+
     return render(
         request,
         "accounts/profile.html",
@@ -100,6 +112,8 @@ def _profile_view(request, username, *, tab):
             "is_following": is_following,
             "articles": articles,
             "tab": tab,
+            "page": page,
+            "pages": pages,
         },
     )
 
