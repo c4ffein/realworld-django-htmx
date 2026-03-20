@@ -1,7 +1,5 @@
 # realworld-django-htmx
-**Porting from Django Ninja API to Django + HTMX fullstack, assisted by AI and the RealWorld e2e spec suite**
-
-Django + HTMX implementation of the RealWorld spec.
+**Django + HTMX fullstack implementation of the RealWorld spec — no API, no SPA**
 
 ## Rules
 
@@ -9,10 +7,10 @@ Django + HTMX implementation of the RealWorld spec.
 
 ## Before finishing
 
-Run `make verify` (lint + type-check + fast tests) and fix any issues.
+Run `make verify` (lint + type-check) and fix any issues.
 
 ## Commands
 
 - `make sync` - install dependencies
-- `make verify` - lint, type-check, test
-- `make test-django-fast` - fast tests only
+- `make verify` - lint, type-check
+- `make e2e` - run Playwright e2e tests
