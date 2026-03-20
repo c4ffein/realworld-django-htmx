@@ -96,6 +96,7 @@ def _save_article_form(form, article):
             tag_name = tag_name.strip()
             if tag_name:
                 article.tags.add(tag_name)
+    cache.delete("all_tags")
 
 
 @login_required
