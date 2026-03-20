@@ -6,6 +6,7 @@ from django.shortcuts import get_object_or_404, redirect, render
 from django.views.decorators.http import require_POST
 
 from accounts.forms import LoginForm, RegisterForm, SettingsForm
+from helpers.exceptions import clean_integrity_error
 from helpers.htmx import is_htmx
 
 User = get_user_model()
@@ -39,10 +40,10 @@ def register_view(request):
                 login(request, user)
                 return redirect("home")
             except IntegrityError as err:
-                err_str = str(err).lower()
-                if "email" in err_str:
+                field = clean_integrity_error(err)
+                if field == "email":
                     form.add_error("email", "This email has already been taken.")
-                elif "username" in err_str:
+                elif field == "username":
                     form.add_error("username", "This username has already been taken.")
                 else:
                     form.add_error(None, "Registration failed.")

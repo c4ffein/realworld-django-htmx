@@ -14,7 +14,7 @@ dependencies = [
     "asgiref==3.8.1",
     "coreapi==2.3.3",
     "django==5.2.1",
-    "django-cors-headers==4.3.1",
+
     "django-extensions==3.2.3",
     "django-taggit==5.0.1",
     "email-validator==2.1.1",

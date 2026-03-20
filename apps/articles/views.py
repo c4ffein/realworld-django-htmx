@@ -148,7 +148,7 @@ def article_favorite_view(request, slug):
         article.favorites.remove(request.user)
     else:
         article.favorites.add(request.user)
-    article = Article.objects.with_favorites(request.user).get(pk=article.pk)
+    article = Article.objects.with_favorites(request.user).select_related("author").get(pk=article.pk)
     if is_htmx(request):
         return render(request, "partials/favorite_button.html", {"article": article})
     return redirect("article_detail", slug=slug)

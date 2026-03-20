@@ -24,7 +24,6 @@ SECRET_KEY = "django-insecure-2jr-1j1%i(%pqej_8_ujp9l2n1vl%^i9y390o^n&nj_(z8!+ke
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = str(getenv("DEBUG", False)).lower() == "true"
 ALLOWED_HOSTS = ["*"] if DEBUG else (lambda s: s.split(";") if s else [])(getenv("ALLOWED_HOSTS", ""))
-CORS_ORIGIN_ALLOW_ALL = True
 
 
 # Application definition
@@ -37,7 +36,6 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     # 3rd Party Packages
     "taggit",
-    "corsheaders",
     "django_extensions",
     # Local Apps
     "apps.accounts",
@@ -46,7 +44,6 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
-    "corsheaders.middleware.CorsMiddleware",
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
