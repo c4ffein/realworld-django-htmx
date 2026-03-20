@@ -482,7 +482,7 @@ wheels = [
 ]
 
 [[package]]
-name = "realworld-django-ninja"
+name = "realworld-django-htmx"
 version = "0.1.0"
 source = { virtual = "." }
 dependencies = [
