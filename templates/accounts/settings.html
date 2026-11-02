@@ -29,6 +29,7 @@
             </fieldset>
             <fieldset class="form-group">
               {{ form.email }}
+              {% for error in form.email.errors %}<p class="error-messages">{{ error }}</p>{% endfor %}
             </fieldset>
             <fieldset class="form-group">
               {{ form.password }}
